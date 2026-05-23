@@ -4,6 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>轉角遇到パン ・ Momo 烘焙屋</title>
+<meta name="description" content="Momo 烘焙屋手作麵包介紹網站，包含貝果、吐司、可頌、甜鹹麵包與節慶點心，提供保存方式與取貨資訊。" />
+<link rel="canonical" href="https://craig7351.github.io/momo-bakery/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="zh_TW" />
+<meta property="og:site_name" content="轉角遇到パン・Momo 烘焙屋" />
+<meta property="og:title" content="轉角遇到パン ・ Momo 烘焙屋" />
+<meta property="og:description" content="每一爐麵包，都來自對食材的堅持與對溫度的細心。" />
+<meta property="og:url" content="https://craig7351.github.io/momo-bakery/" />
+<meta property="og:image" content="https://craig7351.github.io/momo-bakery/images/all_1.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="轉角遇到パン ・ Momo 烘焙屋" />
+<meta name="twitter:description" content="手作麵包與節慶點心，分享剛出爐的溫度。" />
+<meta name="twitter:image" content="https://craig7351.github.io/momo-bakery/images/all_1.webp" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Sawarabi+Mincho&display=swap" rel="stylesheet" />
@@ -50,6 +63,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 32px;
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -63,6 +77,7 @@
   }
   .nav-logo .pan { color: var(--accent); }
   .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-item { position: relative; }
   .nav-links a {
     color: var(--ink-soft);
     text-decoration: none;
@@ -71,9 +86,95 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .submenu-toggle {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .submenu-toggle:hover { color: var(--accent); }
+  .submenu-toggle::after {
+    content: "▾";
+    font-size: 11px;
+    transition: transform 0.2s;
+  }
+  .nav-item.open .submenu-toggle::after { transform: rotate(180deg); }
+  .submenu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    list-style: none;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 10px 14px;
+    min-width: 168px;
+    z-index: 120;
+  }
+  .nav-item.open .submenu { display: block; }
+  .submenu a {
+    display: block;
+    padding: 6px 0;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .nav-toggle {
+    display: none;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--brown-deep);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
 
   @media (max-width: 720px) {
-    .nav-links { display: none; }
+    .nav-toggle { display: block; }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 32px;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      min-width: 132px;
+    }
+    .site-nav.open .nav-links { display: flex; }
+    .nav-links a { font-size: 13px; }
+    .nav-item { position: static; }
+    .submenu-toggle {
+      width: 100%;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+    .submenu {
+      position: static;
+      transform: none;
+      margin-top: 8px;
+      border-radius: 8px;
+      box-shadow: none;
+      padding: 8px 10px;
+      min-width: 0;
+    }
+    .submenu a { font-size: 12px; padding: 5px 0; }
   }
 
   /* ===== HERO ===== */
@@ -522,12 +623,24 @@
 </head>
 <body>
 
-<nav>
+<nav class="site-nav" aria-label="主導覽">
   <div class="nav-inner">
     <div class="nav-logo">轉角遇到<span class="pan">パン</span></div>
-    <ul class="nav-links">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">MENU</button>
+    <ul class="nav-links" id="primary-menu">
       <li><a href="#about">店主</a></li>
-      <li><a href="#breads">麵包</a></li>
+      <li class="nav-item has-submenu">
+        <button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="bread-menu">麵包</button>
+        <ul class="submenu" id="bread-menu">
+          <li><a href="#cat-bagel">01 貝果系列</a></li>
+          <li><a href="#cat-toast">02 吐司系列</a></li>
+          <li><a href="#cat-croissant">03 可頌系列</a></li>
+          <li><a href="#cat-soft">04 軟歐系列</a></li>
+          <li><a href="#cat-sweet">05 甜麵包系列</a></li>
+          <li><a href="#cat-savory">06 鹹麵包系列</a></li>
+          <li><a href="#cat-festival">07 節慶點心</a></li>
+        </ul>
+      </li>
       <li><a href="#storage">保存</a></li>
       <li><a href="#pickup">取貨</a></li>
     </ul>
@@ -558,7 +671,7 @@
     </div>
     <div class="about-grid reveal">
       <div class="about-photo">
-        <img src="images/baker.webp" alt="Momo 店主" />
+        <img src="images/baker.webp" alt="Momo 店主" loading="lazy" decoding="async" />
       </div>
       <div class="about-text">
         <h3>Momo</h3>
@@ -594,7 +707,7 @@
     </div>
 
     <!-- 01 BAGEL -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-bagel">
       <div class="category-head">
         <span class="category-no">01</span>
         <h3 class="category-title">貝果系列</h3>
@@ -604,7 +717,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-chia-blueberry.webp" alt="奇亞籽小藍莓貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-chia-blueberry.webp" alt="奇亞籽小藍莓貝果" />
           <div class="bread-body">
             <div class="bread-name">奇亞籽小藍莓貝果</div>
             <div class="bread-desc">以奇亞籽與野生小藍莓為主，咬得到果粒，每口都帶著酸甜風味。</div>
@@ -613,7 +726,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-cranberry-cheese.webp" alt="蔓越莓乳酪丁貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-cranberry-cheese.webp" alt="蔓越莓乳酪丁貝果" />
           <div class="bread-body">
             <div class="bread-name">蔓越莓乳酪丁貝果</div>
             <div class="bread-desc">蔓越莓麵糰包入乳酪丁，酸甜中帶著淡淡乳酪香氣。</div>
@@ -622,7 +735,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-sausage-cheese.webp" alt="德腸乳酪起司貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-sausage-cheese.webp" alt="德腸乳酪起司貝果" />
           <div class="bread-body">
             <div class="bread-name">德腸乳酪起司貝果</div>
             <div class="bread-desc">德腸與小丁乳酪為主，搭配滿滿乳酪絲，散發濃郁起司香氣。</div>
@@ -631,7 +744,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-curry-sausage.webp" alt="咖哩德腸乳酪起司貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-curry-sausage.webp" alt="咖哩德腸乳酪起司貝果" />
           <div class="bread-body">
             <div class="bread-name">咖哩德腸乳酪起司</div>
             <div class="bread-desc">咖哩風味麵糰包入德腸與乳酪丁，再搭配滿滿乳酪絲，香氣撲鼻。</div>
@@ -640,7 +753,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-chili-cheese.webp" alt="剝皮辣椒乳酪丁貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-chili-cheese.webp" alt="剝皮辣椒乳酪丁貝果" />
           <div class="bread-body">
             <div class="bread-name">剝皮辣椒乳酪丁 🔥</div>
             <div class="bread-desc">花蓮花崗山剝皮辣椒拌入麵團，內包乳酪丁，微辣與濃郁奶香交織。</div>
@@ -649,7 +762,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/bagel-double-berry.webp" alt="雙莓乳酪貝果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/bagel-double-berry.webp" alt="雙莓乳酪貝果" />
           <div class="bread-body">
             <div class="bread-name">雙莓乳酪貝果</div>
             <div class="bread-desc">麵團添加藍莓乾，內餡搭配草莓奶油乳酪，酸甜果香一次擁有。</div>
@@ -661,7 +774,7 @@
     </div>
 
     <!-- 02 TOAST -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-toast">
       <div class="category-head">
         <span class="category-no">02</span>
         <h3 class="category-title">吐司系列</h3>
@@ -671,7 +784,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-japanese.webp" alt="日式生吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-japanese.webp" alt="日式生吐司" />
           <div class="bread-body">
             <div class="bread-name">日式生吐司</div>
             <div class="bread-desc">外皮薄嫩、內部組織細緻，口感柔軟微甜，單吃就能感受到濃郁風味。</div>
@@ -680,7 +793,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-coconut-sugar.webp" alt="椰糖生吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-coconut-sugar.webp" alt="椰糖生吐司" />
           <div class="bread-body">
             <div class="bread-name">椰糖生吐司</div>
             <div class="bread-desc">使用低 GI 椰糖，口感柔軟、能穩定釋放能量，健康又美味。</div>
@@ -689,7 +802,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-choco-walnut.webp" alt="巧克力核桃生吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-choco-walnut.webp" alt="巧克力核桃生吐司" />
           <div class="bread-body">
             <div class="bread-name">巧克力核桃生吐司</div>
             <div class="bread-desc">以生吐司為基底加入法芙娜可可粉，拌入水滴巧克力與核桃，香濃有層次。</div>
@@ -698,7 +811,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-wholewheat-oat.webp" alt="全麥燕麥吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-wholewheat-oat.webp" alt="全麥燕麥吐司" />
           <div class="bread-body">
             <div class="bread-name">全麥燕麥吐司</div>
             <div class="bread-desc">椰子糖與蜂蜜低 GI 配方，加入燕麥片增添顆粒感與 Q 軟口感。</div>
@@ -707,7 +820,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-grape.webp" alt="葡萄小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-grape.webp" alt="葡萄小吐司" />
           <div class="bread-body">
             <div class="bread-name">葡萄小吐司</div>
             <div class="bread-desc">生吐司麵團加入養樂多浸泡的葡萄乾，帶淡淡乳酸香氣。</div>
@@ -716,7 +829,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-pineapple.webp" alt="菠蘿小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-pineapple.webp" alt="菠蘿小吐司" />
           <div class="bread-body">
             <div class="bread-name">菠蘿小吐司</div>
             <div class="bread-desc">生吐司麵團搭配發酵奶油製作的菠蘿皮，香氣與層次感升級。</div>
@@ -725,7 +838,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-pumpkin.webp" alt="南瓜奶酥小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-pumpkin.webp" alt="南瓜奶酥小吐司" />
           <div class="bread-body">
             <div class="bread-name">南瓜奶酥小吐司</div>
             <div class="bread-desc">柔軟麵團加入細緻南瓜泥融合奶香，健康又美味。</div>
@@ -734,7 +847,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-brownie.webp" alt="布朗尼小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-brownie.webp" alt="布朗尼小吐司" />
           <div class="bread-body">
             <div class="bread-name">布朗尼小吐司</div>
             <div class="bread-desc">吐司中間與上層加入布朗尼蛋糕麵糊，宛如享用甜點般幸福。</div>
@@ -743,7 +856,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-brioche-pearl.webp" alt="珍珠糖布里歐小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-brioche-pearl.webp" alt="珍珠糖布里歐小吐司" />
           <div class="bread-body">
             <div class="bread-name">珍珠糖布里歐小吐司</div>
             <div class="bread-desc">鬆軟布里歐搭配少許珍珠糖，甜而不膩，適合全家共享。</div>
@@ -752,7 +865,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-ham-cheese.webp" alt="火腿乳酪小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-ham-cheese.webp" alt="火腿乳酪小吐司" />
           <div class="bread-body">
             <div class="bread-name">火腿乳酪小吐司</div>
             <div class="bread-desc">內餡夾入火腿與乳酪丁，表面鋪上乳酪絲與美乃滋，鹹香濃郁。</div>
@@ -761,7 +874,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-mini.webp" alt="迷你小吐司" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-mini.webp" alt="迷你小吐司" />
           <div class="bread-body">
             <div class="bread-name">迷你小吐司</div>
             <div class="bread-desc">60g 一份的迷你尺寸，可搭配火腿乳酪、鹽奶油玉米等多種口味。</div>
@@ -770,7 +883,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/toast-taro-redbean.webp" alt="芋泥紅豆方塊" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/toast-taro-redbean.webp" alt="芋泥紅豆方塊" />
           <div class="bread-body">
             <div class="bread-name">芋泥紅豆方塊</div>
             <div class="bread-desc">柔軟麵團搭配自製淡淡桂花香芋泥，配上屏東萬丹低糖紅豆泥。</div>
@@ -782,7 +895,7 @@
     </div>
 
     <!-- 03 CROISSANT -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-croissant">
       <div class="category-head">
         <span class="category-no">03</span>
         <h3 class="category-title">可頌系列</h3>
@@ -792,7 +905,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/croissant-salt.webp" alt="鹽可頌" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/croissant-salt.webp" alt="鹽可頌" />
           <div class="bread-body">
             <div class="bread-name">鹽可頌</div>
             <div class="bread-desc">包入 Lurpak 有鹽發酵奶油，表面再灑上鹽之花，鹹香層次豐富。</div>
@@ -801,7 +914,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/croissant-cheese.webp" alt="起司鹽可頌" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/croissant-cheese.webp" alt="起司鹽可頌" />
           <div class="bread-body">
             <div class="bread-name">起司鹽可頌</div>
             <div class="bread-desc">同樣包入發酵奶油，再裹一層帕馬森起司粉，奶香與起司香一咬就上癮。</div>
@@ -810,7 +923,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/croissant-brioche-salt.webp" alt="鹽之花布里歐" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/croissant-brioche-salt.webp" alt="鹽之花布里歐" />
           <div class="bread-body">
             <div class="bread-name">鹽之花布里歐</div>
             <div class="bread-desc">純粹布里歐麵團撒上少許鹽之花，提升風味層次，每一口都迷人。</div>
@@ -822,7 +935,7 @@
     </div>
 
     <!-- 04 SOFT EUROPEAN -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-soft">
       <div class="category-head">
         <span class="category-no">04</span>
         <h3 class="category-title">軟歐 ・ 歐式麵包</h3>
@@ -832,7 +945,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-flax-cranberry.webp" alt="亞麻籽藍莓蔓越莓" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-flax-cranberry.webp" alt="亞麻籽藍莓蔓越莓" />
           <div class="bread-body">
             <div class="bread-name">亞麻籽藍莓蔓越莓</div>
             <div class="bread-desc">無糖無油麵團，加入魯邦種、亞麻籽、藍莓乾與蔓越莓乾，酸甜豐富。</div>
@@ -841,7 +954,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-wholewheat-walnut.webp" alt="全麥核桃葡萄" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-wholewheat-walnut.webp" alt="全麥核桃葡萄" />
           <div class="bread-body">
             <div class="bread-name">全麥核桃葡萄</div>
             <div class="bread-desc">全麥麵團拌入核桃與葡萄乾，外層再包薄薄全麥皮，避免果乾烘烤時焦黑。</div>
@@ -850,7 +963,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-choco-walnut-peach.webp" alt="巧克力核桃水蜜桃" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-choco-walnut-peach.webp" alt="巧克力核桃水蜜桃" />
           <div class="bread-body">
             <div class="bread-name">巧克力核桃水蜜桃</div>
             <div class="bread-desc">法芙娜可可粉、水滴巧克力、核桃與手切水蜜桃丁的奢華組合。</div>
@@ -859,7 +972,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-choco-fig.webp" alt="巧克力無花果" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-choco-fig.webp" alt="巧克力無花果" />
           <div class="bread-body">
             <div class="bread-name">巧克力無花果</div>
             <div class="bread-desc">法芙娜可可粉、Cacao Barry 水滴巧克力與糖漬無花果的法式風味。</div>
@@ -868,7 +981,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-salzburg.webp" alt="薩爾斯堡" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-salzburg.webp" alt="薩爾斯堡" />
           <div class="bread-body">
             <div class="bread-name">薩爾斯堡</div>
             <div class="bread-desc">培根與乳酪丁結合的無糖無油歐包，奶香濃郁、鹹香涮嘴。</div>
@@ -877,7 +990,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-double-cheese.webp" alt="雙重乳酪軟歐" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-double-cheese.webp" alt="雙重乳酪軟歐" />
           <div class="bread-body">
             <div class="bread-name">雙重乳酪軟歐</div>
             <div class="bread-desc">乳酪丁與奶油乳酪雙重組合，香氣濃郁、口感滑順，每一口都超滿足。</div>
@@ -886,7 +999,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-cranberry-cocoa.webp" alt="蔓越莓乳酪可可軟歐" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-cranberry-cocoa.webp" alt="蔓越莓乳酪可可軟歐" />
           <div class="bread-body">
             <div class="bread-name">蔓越莓乳酪可可軟歐</div>
             <div class="bread-desc">可可麵糰搭配蔓越莓乾與乳酪丁，鹹甜交融、可可香濃郁。</div>
@@ -895,7 +1008,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-japanese-cheese.webp" alt="和風起司堡" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-japanese-cheese.webp" alt="和風起司堡" />
           <div class="bread-body">
             <div class="bread-name">和風起司堡</div>
             <div class="bread-desc">乳酪丁與奶油乳酪搭配核桃增添口感與香氣，方形造型約 250g。</div>
@@ -904,7 +1017,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-chestnut-redbean.webp" alt="栗子紅豆" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-chestnut-redbean.webp" alt="栗子紅豆" />
           <div class="bread-body">
             <div class="bread-name">栗子紅豆</div>
             <div class="bread-desc">低糖紅豆餡搭配法國「沙巴東」糖漬栗子碎，風味濃郁不膩。</div>
@@ -913,7 +1026,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-parmesan.webp" alt="帕馬森起司軟法" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-parmesan.webp" alt="帕馬森起司軟法" />
           <div class="bread-body">
             <div class="bread-name">帕馬森起司軟法</div>
             <div class="bread-desc">外層裹上帕馬森起司粉，濃濃起司香一口滿足，適合做成三明治。</div>
@@ -922,7 +1035,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-garlic.webp" alt="香蒜奶油軟法" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-garlic.webp" alt="香蒜奶油軟法" />
           <div class="bread-body">
             <div class="bread-name">香蒜奶油軟法</div>
             <div class="bread-desc">帕馬森起司粉搭配發酵奶油與蒜末，香氣濃郁，台式風味。</div>
@@ -931,7 +1044,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-triple-cheese.webp" alt="三重乳酪軟法" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-triple-cheese.webp" alt="三重乳酪軟法" />
           <div class="bread-body">
             <div class="bread-name">三重乳酪軟法</div>
             <div class="bread-desc">帕馬森起司粉再搭配奶油乳酪與乳酪丁，奶香味十足。</div>
@@ -940,7 +1053,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/soft-honey-cheese.webp" alt="岩燒蜂蜜" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/soft-honey-cheese.webp" alt="岩燒蜂蜜" />
           <div class="bread-body">
             <div class="bread-name">岩燒蜂蜜</div>
             <div class="bread-desc">發酵奶油與切達起司製成的高鈣起司醬，搭配蜂蜜，甜中帶鹹。</div>
@@ -952,7 +1065,7 @@
     </div>
 
     <!-- 05 SWEET -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-sweet">
       <div class="category-head">
         <span class="category-no">05</span>
         <h3 class="category-title">甜口味麵包</h3>
@@ -961,7 +1074,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-pineapple.webp" alt="奶香菠蘿麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-pineapple.webp" alt="奶香菠蘿麵包" />
           <div class="bread-body">
             <div class="bread-name">奶香菠蘿麵包</div>
             <div class="bread-desc">使用發酵奶油製作菠蘿皮，提升香氣，讓菠蘿皮的風味更具層次感。</div>
@@ -970,7 +1083,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-choco-pineapple.webp" alt="巧克力菠蘿麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-choco-pineapple.webp" alt="巧克力菠蘿麵包" />
           <div class="bread-body">
             <div class="bread-name">巧克力菠蘿麵包</div>
             <div class="bread-desc">經典菠蘿換上濃郁巧克力風味，外酥內軟，可可控的最愛。</div>
@@ -979,7 +1092,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-bear-custard.webp" alt="熊掌卡士達麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-bear-custard.webp" alt="熊掌卡士達麵包" />
           <div class="bread-body">
             <div class="bread-name">熊掌卡士達麵包</div>
             <div class="bread-desc">使用蛋黃、鮮奶與發酵奶油，口感細膩，乳香濃郁滑順。</div>
@@ -988,7 +1101,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-redbean.webp" alt="紅豆麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-redbean.webp" alt="紅豆麵包" />
           <div class="bread-body">
             <div class="bread-name">紅豆麵包</div>
             <div class="bread-desc">搭配屏東萬丹低糖紅豆餡，傳統台式風味。</div>
@@ -997,7 +1110,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-redbean-mochi.webp" alt="紅豆麻糬麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-redbean-mochi.webp" alt="紅豆麻糬麵包" />
           <div class="bread-body">
             <div class="bread-name">紅豆麻糬麵包</div>
             <div class="bread-desc">屏東萬丹低糖紅豆餡再加上 Q 彈麻糬，雙重享受。</div>
@@ -1006,7 +1119,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-strawberry-crumb.webp" alt="草莓奶酥麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-strawberry-crumb.webp" alt="草莓奶酥麵包" />
           <div class="bread-body">
             <div class="bread-name">草莓奶酥麵包</div>
             <div class="bread-desc">麵團包入奶酥與草莓果乾，咬得到果粒，酸甜中帶淡淡奶油香。</div>
@@ -1015,7 +1128,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-cranberry-cheese.webp" alt="蔓越莓乳酪麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-cranberry-cheese.webp" alt="蔓越莓乳酪麵包" />
           <div class="bread-body">
             <div class="bread-name">蔓越莓乳酪麵包</div>
             <div class="bread-desc">奶油乳酪增添濃郁奶香，搭配微酸微甜蔓越莓，風味豐富。</div>
@@ -1024,7 +1137,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-blueberry-cheese.webp" alt="藍莓乳酪麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-blueberry-cheese.webp" alt="藍莓乳酪麵包" />
           <div class="bread-body">
             <div class="bread-name">藍莓乳酪麵包</div>
             <div class="bread-desc">奶油乳酪搭配藍莓果香，每口都有清新酸甜的滋味。</div>
@@ -1033,7 +1146,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-sesame-crumb.webp" alt="芝麻奶酥麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-sesame-crumb.webp" alt="芝麻奶酥麵包" />
           <div class="bread-body">
             <div class="bread-name">芝麻奶酥麵包</div>
             <div class="bread-desc">包入香濃芝麻奶酥醬，濃郁芝麻香一咬即化。</div>
@@ -1042,7 +1155,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-condensed-vienna.webp" alt="煉乳奶霜維也納" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-condensed-vienna.webp" alt="煉乳奶霜維也納" />
           <div class="bread-body">
             <div class="bread-name">煉乳奶霜維也納</div>
             <div class="bread-desc">煉乳麵團搭配濃郁煉乳奶霜，奶香四溢，每一口都充滿幸福感。</div>
@@ -1051,7 +1164,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-brown-sugar-roll.webp" alt="黑糖奶油麵包捲" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-brown-sugar-roll.webp" alt="黑糖奶油麵包捲" />
           <div class="bread-body">
             <div class="bread-name">黑糖奶油麵包捲</div>
             <div class="bread-desc">黑糖麵團再加上無水奶油與發酵奶油，奶香與淡淡黑糖風味交織。</div>
@@ -1060,7 +1173,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-brown-sugar-crisp.webp" alt="極致黑糖脆皮麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-brown-sugar-crisp.webp" alt="極致黑糖脆皮麵包" />
           <div class="bread-body">
             <div class="bread-name">極致黑糖脆皮麵包</div>
             <div class="bread-desc">黑糖風味麵團加上一層黑糖脆皮，口感豐富有層次。</div>
@@ -1069,7 +1182,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-choco-whirlwind.webp" alt="巧克力黑旋風" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-choco-whirlwind.webp" alt="巧克力黑旋風" />
           <div class="bread-body">
             <div class="bread-name">巧克力黑旋風</div>
             <div class="bread-desc">內餡包入濃郁水滴巧克力，表面撒上奶油與 Oreo 餅乾碎。</div>
@@ -1078,7 +1191,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-taro.webp" alt="就是芋泥" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-taro.webp" alt="就是芋泥" />
           <div class="bread-body">
             <div class="bread-name">就是芋泥</div>
             <div class="bread-desc">柔軟麵團搭配自製淡淡桂花香芋泥，芋頭控必選。</div>
@@ -1087,7 +1200,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-grape-braid.webp" alt="葡萄辮子麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-grape-braid.webp" alt="葡萄辮子麵包" />
           <div class="bread-body">
             <div class="bread-name">葡萄辮子麵包</div>
             <div class="bread-desc">編織造型搭配養樂多浸泡的葡萄乾，造型可愛、果香滿溢。</div>
@@ -1096,7 +1209,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-butter-roll.webp" alt="奶油餐包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-butter-roll.webp" alt="奶油餐包" />
           <div class="bread-body">
             <div class="bread-name">奶油餐包</div>
             <div class="bread-desc">麵包口感 Q 彈，內含一小塊有鹽發酵奶油，鹹甜恰好。</div>
@@ -1105,7 +1218,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-chia-blueberry-roll.webp" alt="奇亞籽小藍莓餐包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-chia-blueberry-roll.webp" alt="奇亞籽小藍莓餐包" />
           <div class="bread-body">
             <div class="bread-name">奇亞籽小藍莓餐包</div>
             <div class="bread-desc">小巧版本的奇亞籽小藍莓口味，2 入一組剛剛好。</div>
@@ -1114,7 +1227,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-butter-roll-br.webp" alt="奶油捲" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-butter-roll-br.webp" alt="奶油捲" />
           <div class="bread-body">
             <div class="bread-name">奶油捲</div>
             <div class="bread-desc">層層捲起的經典奶油捲，奶香濃郁、口感柔軟。</div>
@@ -1123,7 +1236,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-milky-pull.webp" alt="奶香拔絲麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-milky-pull.webp" alt="奶香拔絲麵包" />
           <div class="bread-body">
             <div class="bread-name">奶香拔絲麵包</div>
             <div class="bread-desc">大量煉乳製作的麵團，柔軟到只能手撕，奶香四溢。</div>
@@ -1132,7 +1245,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/sweet-honey-butter.webp" alt="蜂蜜奶油麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/sweet-honey-butter.webp" alt="蜂蜜奶油麵包" />
           <div class="bread-body">
             <div class="bread-name">蜂蜜奶油麵包</div>
             <div class="bread-desc">發酵奶油搭配蜂蜜，甜中帶鹹、層次豐富。</div>
@@ -1144,7 +1257,7 @@
     </div>
 
     <!-- 06 SAVORY -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-savory">
       <div class="category-head">
         <span class="category-no">06</span>
         <h3 class="category-title">鹹口味麵包</h3>
@@ -1153,7 +1266,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-ufo.webp" alt="飛碟鹹奶油麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-ufo.webp" alt="飛碟鹹奶油麵包" />
           <div class="bread-body">
             <div class="bread-name">飛碟鹹奶油麵包</div>
             <div class="bread-desc">內含一小塊有鹽發酵奶油與鹽之花，獨特鹹甜口感，絕對值得一試。</div>
@@ -1162,7 +1275,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-ham-cheese-burger.webp" alt="火腿乳酪堡" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-ham-cheese-burger.webp" alt="火腿乳酪堡" />
           <div class="bread-body">
             <div class="bread-name">火腿乳酪堡</div>
             <div class="bread-desc">整片火腿與乳酪丁，表面撒上乾酪粉與美乃滋點綴，口感濃郁。</div>
@@ -1171,7 +1284,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-pork-floss.webp" alt="煉乳奶霜肉鬆麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-pork-floss.webp" alt="煉乳奶霜肉鬆麵包" />
           <div class="bread-body">
             <div class="bread-name">煉乳奶霜肉鬆麵包</div>
             <div class="bread-desc">塗抹的不是美乃滋而是煉乳奶油霜，搭配肉鬆鹹甜交織。</div>
@@ -1180,7 +1293,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-corn-tuna.webp" alt="玉米鮪魚沙拉麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-corn-tuna.webp" alt="玉米鮪魚沙拉麵包" />
           <div class="bread-body">
             <div class="bread-name">玉米鮪魚沙拉麵包</div>
             <div class="bread-desc">麵團搭配鮮美玉米鮪魚沙拉，鹹香滋味令人難以抗拒。</div>
@@ -1189,7 +1302,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-potato-ham.webp" alt="馬鈴薯火腿起司麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-potato-ham.webp" alt="馬鈴薯火腿起司麵包" />
           <div class="bread-body">
             <div class="bread-name">馬鈴薯火腿起司麵包</div>
             <div class="bread-desc">綿密馬鈴薯泥搭配火腿塊，最後撒上乳酪絲，鹹口必選。</div>
@@ -1198,7 +1311,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-potato-cheese.webp" alt="馬鈴薯乳酪條" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-potato-cheese.webp" alt="馬鈴薯乳酪條" />
           <div class="bread-body">
             <div class="bread-name">馬鈴薯乳酪條</div>
             <div class="bread-desc">內含綿密馬鈴薯泥，表面灑乳酪絲與美乃滋，奶香濃郁。</div>
@@ -1207,7 +1320,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-bacon-epi.webp" alt="麥穗培根" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-bacon-epi.webp" alt="麥穗培根" />
           <div class="bread-body">
             <div class="bread-name">麥穗培根</div>
             <div class="bread-desc">麥穗造型的法式經典，包入培根的酥脆口感，視覺與味覺雙重享受。</div>
@@ -1216,7 +1329,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-sausage-roll.webp" alt="德腸乳酪卷" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-sausage-roll.webp" alt="德腸乳酪卷" />
           <div class="bread-body">
             <div class="bread-name">德腸乳酪卷</div>
             <div class="bread-desc">麵包包入半根德腸，外層撒乳酪絲，搭配蜂蜜芥末醬，濃郁不膩。</div>
@@ -1225,7 +1338,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-double-berry.webp" alt="雙莓乳酪堡" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-double-berry.webp" alt="雙莓乳酪堡" />
           <div class="bread-body">
             <div class="bread-name">雙莓乳酪堡</div>
             <div class="bread-desc">藍莓與草莓乳酪餡的軟法堡，鹹甜交織、果香濃郁。</div>
@@ -1234,7 +1347,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/savory-scallion-bread.webp" alt="蔥麵包" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/savory-scallion-bread.webp" alt="蔥麵包" />
           <div class="bread-body">
             <div class="bread-name">蔥麵包</div>
             <div class="bread-desc">柔軟麵團拌入新鮮青蔥與鹹香醬料，烘烤後蔥香四溢、口感層次豐富。</div>
@@ -1246,7 +1359,7 @@
     </div>
 
     <!-- 07 FESTIVAL -->
-    <div class="category reveal">
+    <div class="category reveal" id="cat-festival">
       <div class="category-head">
         <span class="category-no">07</span>
         <h3 class="category-title">節慶點心</h3>
@@ -1256,7 +1369,7 @@
       <div class="bread-grid">
 
         <div class="bread-card">
-          <img class="bread-img" src="images/festive-mooncake.webp" alt="奶油香氣蛋黃酥" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/festive-mooncake.webp" alt="奶油香氣蛋黃酥" />
           <div class="bread-body">
             <div class="bread-name">奶油香氣蛋黃酥</div>
             <div class="bread-desc">法國發酵奶油製成焦化奶油，散發榛果奶香，內餡低糖烏豆沙不甜膩。</div>
@@ -1265,7 +1378,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/festive-pineapple-cake.webp" alt="酥鬆鳳梨酥" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/festive-pineapple-cake.webp" alt="酥鬆鳳梨酥" />
           <div class="bread-body">
             <div class="bread-name">酥鬆鳳梨酥</div>
             <div class="bread-desc">無水奶油與煉乳製成餅皮，奶香濃郁細緻，搭配傳統冬瓜鳳梨餡。</div>
@@ -1274,7 +1387,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/festive-canele.webp" alt="香草可麗露" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/festive-canele.webp" alt="香草可麗露" />
           <div class="bread-body">
             <div class="bread-name">香草可麗露</div>
             <div class="bread-desc">萊思克發酵奶油、大溪地波本香草莢與蘭姆酒，外脆內 Q 軟法式經典。</div>
@@ -1283,7 +1396,7 @@
         </div>
 
         <div class="bread-card">
-          <img class="bread-img" src="images/festive-strawberry-daifuku.webp" alt="草莓大福" />
+          <img class="bread-img" loading="lazy" decoding="async" src="images/festive-strawberry-daifuku.webp" alt="草莓大福" />
           <div class="bread-body">
             <div class="bread-name">草莓大福</div>
             <div class="bread-desc">Q 彈麻糬包入完整新鮮草莓與紅豆餡，季節限定甜點。</div>
@@ -1383,6 +1496,50 @@
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('.site-nav');
+  const navToggle = document.querySelector('.nav-toggle');
+  const submenuItem = document.querySelector('.has-submenu');
+  const submenuToggle = document.querySelector('.submenu-toggle');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  if (nav && navToggle) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (submenuItem && submenuToggle) {
+          submenuItem.classList.remove('open');
+          submenuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+    if (submenuItem && submenuToggle) {
+      submenuToggle.addEventListener('click', () => {
+        const isOpen = submenuItem.classList.toggle('open');
+        submenuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        nav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (submenuItem && submenuToggle) {
+          submenuItem.classList.remove('open');
+          submenuToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (submenuItem && submenuToggle && !submenuItem.contains(event.target)) {
+        submenuItem.classList.remove('open');
+        submenuToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 </script>
 
 </body>
