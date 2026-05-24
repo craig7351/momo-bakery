@@ -69,11 +69,19 @@
     align-items: center;
   }
   .nav-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Shippori Mincho', serif;
     font-size: 20px;
     font-weight: 600;
     color: var(--brown-deep);
     letter-spacing: 0.05em;
+  }
+  .nav-logo-icon {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
   }
   .nav-logo .pan { color: var(--accent); }
   .nav-links { display: flex; gap: 32px; list-style: none; }
@@ -279,6 +287,20 @@
     color: var(--brown-deep);
     letter-spacing: 0.06em;
     margin-bottom: 20px;
+  }
+  .section-title-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-title-row .section-title {
+    margin-bottom: 0;
+  }
+  .section-title-logo {
+    width: 52px;
+    height: auto;
+    opacity: 0.95;
   }
   .section-line {
     width: 40px;
@@ -625,7 +647,10 @@
 
 <nav class="site-nav" aria-label="主導覽">
   <div class="nav-inner">
-    <div class="nav-logo">轉角遇到<span class="pan">パン</span></div>
+    <div class="nav-logo">
+      <img class="nav-logo-icon" src="images/logo-momo.png" alt="轉角遇到胖 Logo" />
+      <span>轉角遇到<span class="pan">パン</span></span>
+    </div>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">MENU</button>
     <ul class="nav-links" id="primary-menu">
       <li><a href="#about">店主</a></li>
@@ -665,7 +690,11 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="section-eyebrow">ABOUT THE BAKER</div>
-      <h2 class="section-title">關於店主</h2>
+      <h2 class="section-title section-title-row">
+        <span>關於</span>
+        <img class="section-title-logo" src="images/logo-momo.png" alt="轉角遇到胖 Logo" />
+        <span>店主</span>
+      </h2>
       <div class="section-line"></div>
       <p class="section-desc">每一爐麵包，都來自對食材的堅持與對溫度的細心。</p>
     </div>
